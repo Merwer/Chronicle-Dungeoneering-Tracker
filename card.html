@@ -69,7 +69,21 @@
     </header>
 
     <section id="content" class="content container">
-
+        <div class="card monster">
+            <span class="icon attack cost-1">6</span>
+            <span class="icon health cost-2">13</span>
+            <img class="card-img" src="" />
+            <p class="card-name">Yk'Lagor</p>
+            <p class="card-family">Demon</p>
+            <div class="card-effect">
+                <p>
+                    <span class="keyword">Remove</span> all your Armour
+                </p>
+            </div>
+            <span class="card-rarity ruby"></span>
+            <span class="icon attack reward-1">2</span>
+            <span class="icon armour reward-2">1</span>
+        </div>
     </section>
 
     <footer class="container-fluid">
@@ -84,20 +98,7 @@
 
     <script src="js/vendor/bootstrap.min.js"></script>
 
-    <script src="js/card.js"></script>
     <script src="js/main.js"></script>
-    <script>
-        var card = new chronicle.Card();
-        card.cardtype = chronicle.Card.Types.ENEMY;
-        card.name = "Yk\'Lagor";
-        card.family = "Demon";
-        card.effect = "<span class='keyword'>Remove</span> all your Armour";
-        card.cost1 = new chronicle.Card.Reward(chronicle.Attributes.ATTACK, 6);
-        card.cost2 = new chronicle.Card.Reward(chronicle.Attributes.HEALTH, 13);
-        card.reward1 = new chronicle.Card.Reward(chronicle.Attributes.ATTACK, 2);
-
-        $("#content").append(card.html());
-    </script>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
