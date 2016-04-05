@@ -37,7 +37,8 @@ chronicle.dungeoneering.draft = (function ($) {
         var index;
         for (index = 0; index < selectionSlots.length; index += 1) {
             var slot = $(selectionSlots[index]);
-            if (!(slot.attr('src'))) {
+            var img = $(slot.children("img")[0]);
+            if (!(img.attr('src'))) {
                 window.console.log("Empty slot found at " + index);
                 return slot;
             }
@@ -53,7 +54,9 @@ chronicle.dungeoneering.draft = (function ($) {
         if (!nextSlot) {
             return;
         }
-        nextSlot.attr('src', selectedCard.img).show();
+        var img = $(nextSlot.children("img")[0]);
+        img.attr('src', selectedCard.img)
+        nextSlot.show();
     };
 
     var substringMatcher = function (strs) {

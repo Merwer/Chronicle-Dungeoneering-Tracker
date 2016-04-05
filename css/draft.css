@@ -1,0 +1,21 @@
+.card-choices {
+    max-width: 60vw;
+}
+
+.card-choice img {
+    max-width: 15vw;
+}
+
+.shift-down {
+    margin-top: 10vh;
+}
+
+.rotate-counterclockwise {
+    transform-origin: 50% 50%;
+    transform: rotate(-10deg);
+}
+
+.rotate-clockwise {
+    transform-origin: 50% 50%;
+    transform: rotate(10deg);
+}
