@@ -69,57 +69,93 @@
     </header>
 
     <section id="content" class="content container">
-        <div class="card-choices">
-            <div class="user-input">
-                <input class="typeahead" type="text" placeholder="Card Name">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="card-choices">
+                    <div class="user-input">
+                        <input class="typeahead" type="text" placeholder="Card Name">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div id="card-choice-1" class="card-choice shift-down rotate-counterclockwise">
+                                <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                                <img>
+                                <p class="card-score">78</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div id="card-choice-2" class="card-choice">
+                                <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                                <img>
+                                <p class="card-score">78</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div id="card-choice-3" class="card-choice shift-down rotate-clockwise selected">
+                                <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                                <img>
+                                <p class="card-score">78</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4 col-lg-offset-2">
+                            <div id="card-choice-4" class="card-choice rotate-counterclockwise">
+                                <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                                <img>
+                                <p class="card-score">78</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-lg-offset-1">
+                            <div id="card-choice-5" class="card-choice rotate-clockwise">
+                                <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
+                                <img>
+                                <p class="card-score">78</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-lg-3 col-lg-offset-1">
-                    <div id="card-choice-1" class="card-choice shift-down rotate-counterclockwise">
-                        <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
-                        <img>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-lg-offset-1">
-                    <div id="card-choice-2" class="card-choice">
-                        <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
-                        <img>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-lg-offset-1">
-                    <div id="card-choice-3" class="card-choice shift-down rotate-clockwise">
-                        <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
-                        <img>
-                    </div>
+            <div class="col-md-2">
+                <ol class="rewards">
+                    <li class="weapons">0</li>
+                    <li class="attack">0</li>
+                    <li class="gold">0</li>
+                    <li class="health">0</li>
+                    <li class="armour">0</li>
+                </ol>
+            </div>
+            <div class="col-md-3">
+                <div class="previous-selections">
+                    <ol class="card-selections support-selections">
+                        <div class="heading">
+                            <span class="name">Support</span>
+                            <span class="count">6</span>
+                        </div>
+                        <li>
+                            <span class="value">4</span>
+                            <span class="name">Barricade</span>
+                            <span class="count">3</span>
+                        </li>
+                        <li>
+                            <span class="value">2</span>
+                            <span class="name">Shug</span>
+                            <span class="count">3</span>
+                        </li>
+                    </ol>
+                    <ol class="card-selections fight-selections">
+                        <div class="heading">
+                            <span class="name">Fight</span>
+                            <span class="count">6</span>
+                        </div>
+                        <li>
+                            <span class="value">5</span>
+                            <span class="name">Barrelchest</span>
+                            <span class="count">1</span>
+                        </li>
+                    </ol>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-3 col-lg-offset-3">
-                    <div id="card-choice-4" class="card-choice rotate-counterclockwise">
-                        <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
-                        <img>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-lg-offset-1">
-                    <div id="card-choice-5" class="card-choice rotate-clockwise">
-                        <button type="button" class="close top-right" aria-label="close"><span aria-hidden="true">&times;</span></button>
-                        <img>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="previous-selections">
-            <ol class="rewards">
-                <li class="weapons">0</li>
-                <li class="attack">0</li>
-                <li class="gold">0</li>
-                <li class="health">0</li>
-                <li class="armour">0</li>
-            </ol>
-            <ol class="card-selections support-selections">
-            </ol>
-            <ol class="card-selections fight-selections">
-            </ol>
         </div>
     </section>
 

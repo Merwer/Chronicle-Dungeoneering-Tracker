@@ -3,7 +3,16 @@
 }
 
 .card-choice img {
-    max-width: 15vw;
+    max-width: 100%;
+}
+
+.card-choice:not(.selected) img {
+    opacity: 0.4;
+}
+
+.card-choice .card-score {
+    text-align: center;
+    font-weight: bold;
 }
 
 .shift-down {
@@ -24,4 +33,42 @@
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.rewards,
+.card-selections {
+    list-style-type: none;
+}
+
+.rewards li {
+    display: inline;
+}
+
+.card-selections li {
+    background-color: darkkhaki;
+}
+
+.card-selections li .count {
+    float: right;
+    background-color: darkkhaki;
+}
+
+.card-selections li .count:before {
+    content: "x";
+}
+
+.support-selections:before {
+    content: "Support";
+}
+
+.support-selections li .value {
+    background-color: gold;
+}
+
+.fight-selections:before {
+    content: "Fight";
+}
+
+.fight-selections li .value {
+    background-color: red;
 }
