@@ -33,15 +33,17 @@ chronicle.dungeoneering.draft = (function ($) {
 
     var selectionSlots = $('.card-choices .card-choice');
 
-    var findNextEmptySlot = function () {
-        var index;
-        for (index = 0; index < selectionSlots.length; index += 1) {
-            var slot = $(selectionSlots[index]);
-            if (slot.hasClass("hidden")) {
-                window.console.log("Empty slot found at " + index);
-                return slot;
-            }
+    var saveCheck = function () {
+        var selectedCount = selectionSlots.filter('.selected').length;
+        var unfilledCount = selectionSlots.filter(".hidden").length;
+        if (selectedCount === 2 && unfilledCount === 0) {
+            window.alert("can save");
         }
+    };
+
+    var findNextEmptySlot = function () {
+        var unfilledSlots = selectionSlots.filter(".hidden");
+        return unfilledSlots.length === 0 ? null : $(unfilledSlots[0]);
     };
 
     var cardSelected = function (ev, suggestion) {
@@ -56,6 +58,7 @@ chronicle.dungeoneering.draft = (function ($) {
         img = $(nextSlot.children("img")[0]);
         img.attr('src', selectedCard.img);
         nextSlot.removeClass("hidden");
+        saveCheck();
     };
 
     var substringMatcher = function (strs) {
@@ -81,7 +84,20 @@ chronicle.dungeoneering.draft = (function ($) {
     };
 
     var cardCloseClicked = function (evt) {
-        $(this).closest(".card-choice").addClass("hidden");
+        $(this).closest(".card-choice").addClass("hidden").removeClass("selected");
+    };
+
+    var cardPicked = function () {
+        var choice = $(this).closest(".card-choice");
+        if (choice.hasClass("selected")) {
+            choice.removeClass("selected");
+        } else {
+            var selectedCount = selectionSlots.filter('.selected').length;
+            if (selectedCount < 2) {
+                choice.addClass("selected");
+                saveCheck();
+            }
+        }
     };
 
     var init = function () {
@@ -93,8 +109,8 @@ chronicle.dungeoneering.draft = (function ($) {
             source: substringMatcher(nameStrings)
         }).bind('typeahead:select', cardSelected);
 
-        selectionSlots.addClass("hidden");
         selectionSlots.find(".close").click(cardCloseClicked);
+        selectionSlots.find("img").click(cardPicked);
     };
 
     init();

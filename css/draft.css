@@ -2,8 +2,14 @@
     max-width: 60vw;
 }
 
+.card-choice .close {
+    z-index: 10;
+}
+
 .card-choice img {
     max-width: 100%;
+    cursor: pointer;
+    z-index: 5;
 }
 
 .card-choice:not(.selected) img {
