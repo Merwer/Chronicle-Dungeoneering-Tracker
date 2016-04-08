@@ -19,3 +19,9 @@
     transform-origin: 50% 50%;
     transform: rotate(10deg);
 }
+
+.top-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

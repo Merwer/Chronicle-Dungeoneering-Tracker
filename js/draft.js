@@ -37,8 +37,7 @@ chronicle.dungeoneering.draft = (function ($) {
         var index;
         for (index = 0; index < selectionSlots.length; index += 1) {
             var slot = $(selectionSlots[index]);
-            var img = $(slot.children("img")[0]);
-            if (!(img.attr('src'))) {
+            if (slot.hasClass("hidden")) {
                 window.console.log("Empty slot found at " + index);
                 return slot;
             }
@@ -54,9 +53,9 @@ chronicle.dungeoneering.draft = (function ($) {
         if (!nextSlot) {
             return;
         }
-        var img = $(nextSlot.children("img")[0]);
-        img.attr('src', selectedCard.img)
-        nextSlot.show();
+        img = $(nextSlot.children("img")[0]);
+        img.attr('src', selectedCard.img);
+        nextSlot.removeClass("hidden");
     };
 
     var substringMatcher = function (strs) {
@@ -81,6 +80,10 @@ chronicle.dungeoneering.draft = (function ($) {
         };
     };
 
+    var cardCloseClicked = function (evt) {
+        $(this).closest(".card-choice").addClass("hidden");
+    };
+
     var init = function () {
         $('.typeahead').typeahead({
             hint: true,
@@ -90,7 +93,8 @@ chronicle.dungeoneering.draft = (function ($) {
             source: substringMatcher(nameStrings)
         }).bind('typeahead:select', cardSelected);
 
-        selectionSlots.hide();
+        selectionSlots.addClass("hidden");
+        selectionSlots.find(".close").click(cardCloseClicked);
     };
 
     init();
