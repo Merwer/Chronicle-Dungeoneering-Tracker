@@ -1,35 +1,8 @@
-/*global jQuery*/
+/*global jQuery, Bloodhound*/
 var chronicle = chronicle || {};
 chronicle.dungeoneering = chronicle.dungoneering || {};
 chronicle.dungeoneering.draft = (function ($) {
     "use strict";
-
-    var localData = [{
-        "id": 186,
-        "name": "Shug",
-        "img": "http://hydra-media.cursecdn.com/chronicle.gamepedia.com/3/3a/Shug.png"
-    }, {
-        "id": 124,
-        "name": "Kayle",
-        "img": "http://chronicle.gamepedia.com/File:Kayle.png"
-    }, {
-        "id": 62,
-        "name": "Barrelchest",
-        "img": "http://hydra-media.cursecdn.com/chronicle.gamepedia.com/0/07/Barrelchest.png"
-    }, {
-        "id": 297,
-        "name": "Barricade",
-        "img": "http://chronicle.gamepedia.com/File:Barricade.png"
-    }];
-
-    var nameStrings = $.map(localData, function (card) {
-        return card.name;
-    });
-
-    var nameDictionary = {};
-    $.each(localData, function (index, card) {
-        nameDictionary[card.name] = card;
-    });
 
     var selectionSlots = $('.card-choices .card-choice');
 
@@ -46,8 +19,7 @@ chronicle.dungeoneering.draft = (function ($) {
         return unfilledSlots.length === 0 ? null : $(unfilledSlots[0]);
     };
 
-    var cardSelected = function (ev, suggestion) {
-        var selectedCard = nameDictionary[suggestion];
+    var cardSelected = function (ev, selectedCard) {
         var img;
         var nextSlot = findNextEmptySlot();
 
@@ -101,12 +73,22 @@ chronicle.dungeoneering.draft = (function ($) {
     };
 
     var init = function () {
+        var cards = new Bloodhound({
+            datumTokenizer: Bloodhound.tokenizers.obj.whitespace("name"),
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            prefetch: "/cards.json"
+        });
+        cards.clearPrefetchCache();
+        cards.initialize();
+
         $('.typeahead').typeahead({
             hint: true,
             highlight: true,
             minLength: 1
         }, {
-            source: substringMatcher(nameStrings)
+            name: "cards_search",
+            displayKey: "name",
+            source: cards.ttAdapter()
         }).bind('typeahead:select', cardSelected);
 
         selectionSlots.find(".close").click(cardCloseClicked);
