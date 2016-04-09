@@ -4,8 +4,14 @@ chronicle.dungeoneering = chronicle.dungoneering || {};
 chronicle.dungeoneering.draft = (function ($) {
     'use strict';
 
+    var cardList;
+    var lookup;
     var selectionSlots = $('.card-choices .card-choice');
     var submitButton = $('.user-input button[type=submit]');
+
+    var findCardById = function (id) {
+        return lookup[id];
+    };
 
     var saveCheck = function () {
         var selectedCount = selectionSlots.filter('.selected').length;
@@ -32,7 +38,7 @@ chronicle.dungeoneering.draft = (function ($) {
 
         window.console.log('Selection: ', selectedCard);
         img = $(nextSlot.children('img')[0]);
-        img.attr('src', selectedCard.img);
+        img.attr('src', selectedCard.image);
         nextSlot.removeClass('hidden');
         saveCheck();
     };
@@ -55,22 +61,60 @@ chronicle.dungeoneering.draft = (function ($) {
         saveCheck();
     };
 
+    var updateWithState = function (state) {
+        var roundId = 0;
+        var cardId;
+        var cardIndex;
+        for (roundId = 0; roundId < state.rounds.length; roundId += 1) {
+            var round = state.rounds[roundId];
+            for (cardIndex = 0; cardIndex < round.options.length; cardIndex += 1) {
+                cardId = round.options[cardIndex];
+                var card = findCardById(cardId);
+                window.alert(JSON.stringify(card));
+            }
+        }
+    };
+
+    var requestDraftState = function () {
+        $.getJSON("/data/state.json") //TODO: This should be a service
+            .done(function (state) {
+                updateWithState(state);
+            })
+            .fail(function () {
+                window.alert("State request failed");
+            });
+    };
+
+    var performSave = function () {
+        $.get("/") //TODO: This should be a post
+            .done(function () {
+                requestDraftState();
+            })
+            .fail(function () {
+                window.alert("Save failed");
+            });
+    };
+
     var submitPicks = function () {
         if (saveCheck()) {
-            //TODO: Submit picks to a service
-            //TODO: Get current state of draft from service
-            //TODO: Update page to reflect current state of draft
-            window.alert('saved');
+            performSave();
         }
     };
 
     var init = function () {
+        lookup = [];
+        $.each(cardList, function (index, card) {
+            lookup[card.id] = card;
+        });
+        selectionSlots.find('.close').click(cardCloseClicked);
+        selectionSlots.find('img').click(cardPicked);
+        submitButton.click(submitPicks);
+
         var cardData = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: '/cards.json'
+            local: cardList
         });
-        cardData.clearPrefetchCache();
         cardData.initialize();
 
         $('.typeahead').typeahead({
@@ -82,11 +126,10 @@ chronicle.dungeoneering.draft = (function ($) {
             displayKey: 'name',
             source: cardData.ttAdapter()
         }).bind('typeahead:select', cardSelected);
-
-        selectionSlots.find('.close').click(cardCloseClicked);
-        selectionSlots.find('img').click(cardPicked);
-        submitButton.click(submitPicks);
     };
 
-    init();
+    $.getJSON("/data/cards.json", function (data) {
+        cardList = data;
+        init();
+    });
 }(jQuery));
