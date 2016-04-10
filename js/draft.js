@@ -4,6 +4,9 @@ chronicle.dungeoneering = chronicle.dungoneering || {};
 chronicle.dungeoneering.draft = (function ($) {
     'use strict';
 
+    var deckDraft = {
+        rounds: []
+    };
     var cardList;
     var lookup;
     var selectionSlots = $('.card-choices .card-choice');
@@ -33,6 +36,10 @@ chronicle.dungeoneering.draft = (function ($) {
         return unfilledSlots.length === 0 ? null : $(unfilledSlots[0]);
     };
 
+    var clearText = function () {
+        $('.typeahead').typeahead('val', '');
+    };
+
     var cardSelected = function (ev, selectedCard) {
         var img;
         var nextSlot = findNextEmptySlot();
@@ -44,14 +51,15 @@ chronicle.dungeoneering.draft = (function ($) {
         img = $(nextSlot.children('img')[0]);
         img.attr('src', selectedCard.image);
         nextSlot.removeClass('hidden');
-        nextSlot.data("cardId", selectedCard.id);
+        nextSlot.data('cardId', selectedCard.id);
+        clearText();
         saveCheck();
     };
 
     var cardCloseClicked = function (evt) {
         var choiceSlot = $(this).closest('.card-choice');
         choiceSlot.addClass('hidden').removeClass('selected');
-        choiceSlot.data("cardId", null);
+        choiceSlot.data('cardId', null);
         saveCheck();
     };
 
@@ -71,19 +79,19 @@ chronicle.dungeoneering.draft = (function ($) {
     var addReward = function (reward) {
         var selector = null;
         switch (reward.type) {
-        case "weapon":
+        case 'weapon':
             addToHtml($('.rewards .weapons'), 1);
             break;
-        case "attack":
+        case 'attack':
             addToHtml($('.rewards .attack'), reward.value0);
             break;
-        case "gold":
+        case 'gold':
             addToHtml($('.rewards .gold'), reward.value0);
             break;
-        case "health":
+        case 'health':
             addToHtml($('.rewards .health'), reward.value0);
             break;
-        case "armour":
+        case 'armour':
             addToHtml($('.rewards .armour'), reward.value0);
             break;
         }
@@ -103,28 +111,28 @@ chronicle.dungeoneering.draft = (function ($) {
 
     var addCardToSupport = function (card) {
         var item = $('<li>');
-        item.append($('<span>').addClass("value").html(card.goldCost));
-        item.append($('<span>').addClass("name").html(card.name));
-        item.append($('<span>').addClass("count").html(1));
+        item.append($('<span>').addClass('value').html(card.goldCost));
+        item.append($('<span>').addClass('name').html(card.name));
+        item.append($('<span>').addClass('count').html(1));
         $('.support-selections').append(item);
         addToHtml($('.support-selections .heading .count'), 1);
     };
 
     var addCardToAttack = function (card) {
         var item = $('<li>');
-        item.append($('<span>').addClass("value").html(card.health));
-        item.append($('<span>').addClass("name").html(card.name));
-        item.append($('<span>').addClass("count").html(1));
+        item.append($('<span>').addClass('value').html(card.health));
+        item.append($('<span>').addClass('name').html(card.name));
+        item.append($('<span>').addClass('count').html(1));
         $('.fight-selections').append(item);
         addToHtml($('.fight-selections .heading .count'), 1);
     };
 
     var addCardToDeck = function (card) {
         switch (card.type) {
-        case "support":
+        case 'support':
             addCardToSupport(card);
             break;
-        case "combat":
+        case 'combat':
             addCardToAttack(card);
             break;
         }
@@ -146,16 +154,28 @@ chronicle.dungeoneering.draft = (function ($) {
         $('.fight-selections .heading .count').html('0');
     };
 
+    var clearChoices = function () {
+        selectionSlots.addClass('hidden').removeClass('selected');
+        selectionSlots.data('cardId', null);
+    };
+
+    var setRound = function (roundId) {
+        $('.round-counter .current').html(roundId);
+    };
+
     var updateWithState = function (state) {
+        deckDraft = state;
         var roundId = 0;
         var cardId;
         var cardIndex;
         clearRewards();
         clearDeck();
+        clearChoices();
+        setRound(deckDraft.rounds.length + 1);
         for (roundId = 0; roundId < state.rounds.length; roundId += 1) {
             var round = state.rounds[roundId];
             for (cardIndex = 0; cardIndex < round.picks.length; cardIndex += 1) {
-                cardId = round.options[cardIndex];
+                cardId = round.picks[cardIndex];
                 var card = findCardById(cardId);
                 addCardToState(card);
             }
@@ -164,12 +184,12 @@ chronicle.dungeoneering.draft = (function ($) {
 
     var constructRound = function () {
         var round = {
-            "options": [],
-            "picks": []
+            options: [],
+            picks: []
         };
         $.each(selectionSlots, function (index, element) {
             var ele = $(element);
-            var cardId = ele.data("cardId");
+            var cardId = ele.data('cardId');
             round.options.push(cardId);
             if (ele.hasClass('selected')) {
                 round.picks.push(cardId);
@@ -179,28 +199,26 @@ chronicle.dungeoneering.draft = (function ($) {
     };
 
     var requestDraftState = function () {
-        $.getJSON("/data/state.json") //TODO: This should be a service
-            .done(function (state) {
-                //TODO: This should care about the response
-                var data = constructRound();
-                updateWithState({
-                    rounds: [data]
-                });
-            })
-            .fail(function () {
-                window.alert("State request failed");
-            });
+        updateWithState(deckDraft); //TODO: This should be a service
+        /*
+        $.getJSON('/data/state.json')
+            .done(
+                updateWithState
+            ).fail(function () {
+                window.alert('State request failed');
+            
+        */
     };
 
     var performSave = function () {
         var data = constructRound();
-        //TODO: This should be a post
-        $.get("/", {
+        deckDraft.rounds.push(data);
+        $.get('/', { //TODO: This should be a post
             data: data
         }).done(
             requestDraftState
         ).fail(function () {
-            window.alert("Save failed");
+            window.alert('Save failed');
         });
     };
 
@@ -237,7 +255,7 @@ chronicle.dungeoneering.draft = (function ($) {
         }).bind('typeahead:select', cardSelected);
     };
 
-    $.getJSON("/data/cards.json", function (data) {
+    $.getJSON('/data/cards.json', function (data) {
         cardList = data;
         init();
     });
