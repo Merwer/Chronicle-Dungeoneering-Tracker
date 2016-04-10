@@ -80,7 +80,7 @@ chronicle.dungeoneering.draft = (function ($) {
         var selector = null;
         switch (reward.type) {
         case 'weapon':
-            addToHtml($('.rewards .weapons'), 1);
+            addToHtml($('.rewards .weapon'), 1);
             break;
         case 'attack':
             addToHtml($('.rewards .attack'), reward.value0);

@@ -2,3 +2,28 @@ html,
 body {
     height: 100%;
 }
+
+.icon {
+    width: 35px;
+    height: 35px;
+}
+
+.weapon {
+    background-image: url(/img/icons/weapon.png);
+}
+
+.attack {
+    background-image: url(/img/icons/attack.png);
+}
+
+.gold {
+    background-image: url(/img/icons/gold.png);
+}
+
+.health {
+    background-image: url(/img/icons/health.png);
+}
+
+.armour {
+    background-image: url(/img/icons/armour.png);
+}
