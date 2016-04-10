@@ -13,6 +13,10 @@ chronicle.dungeoneering.draft = (function ($) {
         return lookup[id];
     };
 
+    var addToHtml = function (element, amount) {
+        element.html(window.parseInt(element.html(), 10) + amount);
+    };
+
     var saveCheck = function () {
         var selectedCount = selectionSlots.filter('.selected').length;
         var unfilledCount = selectionSlots.filter('.hidden').length;
@@ -68,24 +72,19 @@ chronicle.dungeoneering.draft = (function ($) {
         var selector = null;
         switch (reward.type) {
         case "weapon":
-            selector = $('.rewards .weapons');
-            selector.html(window.parseInt(selector.html()) + 1);
+            addToHtml($('.rewards .weapons'), 1);
             break;
         case "attack":
-            selector = $('.rewards .attack');
-            selector.html(window.parseInt(selector.html()) + reward.value0);
+            addToHtml($('.rewards .attack'), reward.value0);
             break;
         case "gold":
-            selector = $('.rewards .gold');
-            selector.html(window.parseInt(selector.html()) + reward.value0);
+            addToHtml($('.rewards .gold'), reward.value0);
             break;
         case "health":
-            selector = $('.rewards .health');
-            selector.html(window.parseInt(selector.html()) + reward.value0);
+            addToHtml($('.rewards .health'), reward.value0);
             break;
         case "armour":
-            selector = $('.rewards .armour');
-            selector.html(window.parseInt(selector.html()) + reward.value0);
+            addToHtml($('.rewards .armour'), reward.value0);
             break;
         }
     };
@@ -102,8 +101,33 @@ chronicle.dungeoneering.draft = (function ($) {
         }
     };
 
-    var addCardToDeck = function (card) {
+    var addCardToSupport = function (card) {
+        var item = $('<li>');
+        item.append($('<span>').addClass("value").html(card.goldCost));
+        item.append($('<span>').addClass("name").html(card.name));
+        item.append($('<span>').addClass("count").html(1));
+        $('.support-selections').append(item);
+        addToHtml($('.support-selections .heading .count'), 1);
+    };
 
+    var addCardToAttack = function (card) {
+        var item = $('<li>');
+        item.append($('<span>').addClass("value").html(card.health));
+        item.append($('<span>').addClass("name").html(card.name));
+        item.append($('<span>').addClass("count").html(1));
+        $('.fight-selections').append(item);
+        addToHtml($('.fight-selections .heading .count'), 1);
+    };
+
+    var addCardToDeck = function (card) {
+        switch (card.type) {
+        case "support":
+            addCardToSupport(card);
+            break;
+        case "combat":
+            addCardToAttack(card);
+            break;
+        }
     };
 
     var addCardToState = function (card) {
@@ -116,7 +140,10 @@ chronicle.dungeoneering.draft = (function ($) {
     };
 
     var clearDeck = function () {
-        //TODO: Clear the deck
+        $('.support-selections li').remove();
+        $('.support-selections .heading .count').html('0');
+        $('.fight-selections li').remove();
+        $('.fight-selections .heading .count').html('0');
     };
 
     var updateWithState = function (state) {
@@ -127,7 +154,7 @@ chronicle.dungeoneering.draft = (function ($) {
         clearDeck();
         for (roundId = 0; roundId < state.rounds.length; roundId += 1) {
             var round = state.rounds[roundId];
-            for (cardIndex = 0; cardIndex < round.options.length; cardIndex += 1) {
+            for (cardIndex = 0; cardIndex < round.picks.length; cardIndex += 1) {
                 cardId = round.options[cardIndex];
                 var card = findCardById(cardId);
                 addCardToState(card);
@@ -167,11 +194,12 @@ chronicle.dungeoneering.draft = (function ($) {
 
     var performSave = function () {
         var data = constructRound();
-        $.get("/", { //TODO: This should be a post
+        //TODO: This should be a post
+        $.get("/", {
             data: data
-        }).done(function () {
-            requestDraftState();
-        }).fail(function () {
+        }).done(
+            requestDraftState
+        ).fail(function () {
             window.alert("Save failed");
         });
     };
