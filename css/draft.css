@@ -46,12 +46,22 @@
     list-style-type: none;
 }
 
+.rewards,
 .rewards li {
-    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.rewards li {
+    display: inline-block;
 }
 
 .card-selections li {
     background-color: darkkhaki;
+}
+
+.card-selections li .value {
+    display: inline-block;
 }
 
 .card-selections li .count {
@@ -63,16 +73,8 @@
     content: "x";
 }
 
-.support-selections:before {
-    content: "Support";
-}
-
 .support-selections li .value {
     background-color: gold;
-}
-
-.fight-selections:before {
-    content: "Fight";
 }
 
 .fight-selections li .value {

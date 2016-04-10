@@ -111,7 +111,7 @@ chronicle.dungeoneering.draft = (function ($) {
 
     var addCardToSupport = function (card) {
         var item = $('<li>');
-        item.append($('<span>').addClass('value').html(card.goldCost));
+        item.append($('<span>').addClass('icon').addClass('gold').addClass('value').html(card.goldCost));
         item.append($('<span>').addClass('name').html(card.name));
         item.append($('<span>').addClass('count').html(1));
         $('.support-selections').append(item);
@@ -120,7 +120,7 @@ chronicle.dungeoneering.draft = (function ($) {
 
     var addCardToAttack = function (card) {
         var item = $('<li>');
-        item.append($('<span>').addClass('value').html(card.health));
+        item.append($('<span>').addClass('icon').addClass('health').addClass('value').html(card.health));
         item.append($('<span>').addClass('name').html(card.name));
         item.append($('<span>').addClass('count').html(1));
         $('.fight-selections').append(item);

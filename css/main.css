@@ -4,8 +4,17 @@ body {
 }
 
 .icon {
-    width: 35px;
-    height: 35px;
+    display: block;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    font-size: 1em;
+    text-align: center;
+    color: white;
+    font-weight: bold;
 }
 
 .weapon {
