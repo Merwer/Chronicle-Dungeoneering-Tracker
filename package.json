@@ -1,0 +1,30 @@
+{
+  "name": "chronicle-dungeoneering-tracker",
+  "version": "0.0.1",
+  "description": "Dungoneering Tracker for Jagex's Runescape Chronicle",
+  "license": "MIT",
+  "repository": "merwer/Chronicle-Dungeoneering-Tracker",
+  "bugs": { "url" : "http://github.com/merwer/Chronicle-Dungeoneering-Tracker/issues"
+  },
+  "author": {
+    "name": "Bill Belanger",
+    "email": "wj.belanger@gmail.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "keywords": [
+    "chronicle",
+    "runescape",
+    "game",
+	"ccg"
+  ],
+  "devDependencies": {
+    "gulp-qunit": "~0.2.1",
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.5.1"
+  }
+}
