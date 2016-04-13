@@ -1,6 +1,42 @@
 /*global jQuery, Bloodhound*/
 var chronicle = chronicle || {};
 chronicle.dungeoneering = chronicle.dungoneering || {};
+chronicle.CardList = function (callback) {
+    "use strict";
+
+    var cards;
+    var that = this;
+    var lookup = [];
+
+    this.allCards = function () {
+        return cards;
+    };
+
+    this.getCard = function (id) {
+        return lookup[id];
+    };
+
+    var init = function (cardList) {
+        cards = cardList;
+        jQuery.each(cardList, function (index, card) {
+            lookup[card.id] = card;
+        });
+        if (callback && jQuery.isFunction(callback)) {
+            callback();
+        }
+    };
+
+    jQuery.getJSON('/data/cards.json', function (data) {
+        init(data);
+    });
+};
+
+chronicle.Deck = function () {
+    "use strict";
+
+    var cards = [];
+};
+
 chronicle.dungeoneering.draft = (function ($) {
     'use strict';
 
@@ -8,13 +44,8 @@ chronicle.dungeoneering.draft = (function ($) {
         rounds: []
     };
     var cardList;
-    var lookup;
     var selectionSlots = $('.card-choices .card-choice');
     var submitButton = $('.user-input button[type=submit]');
-
-    var findCardById = function (id) {
-        return lookup[id];
-    };
 
     var addToHtml = function (element, amount) {
         element.html(window.parseInt(element.html(), 10) + amount);
@@ -176,7 +207,7 @@ chronicle.dungeoneering.draft = (function ($) {
             var round = state.rounds[roundId];
             for (cardIndex = 0; cardIndex < round.picks.length; cardIndex += 1) {
                 cardId = round.picks[cardIndex];
-                var card = findCardById(cardId);
+                var card = cardList.getCard(cardId);
                 addCardToState(card);
             }
         }
@@ -229,10 +260,6 @@ chronicle.dungeoneering.draft = (function ($) {
     };
 
     var init = function () {
-        lookup = [];
-        $.each(cardList, function (index, card) {
-            lookup[card.id] = card;
-        });
         selectionSlots.find('.close').click(cardCloseClicked);
         selectionSlots.find('img').click(cardPicked);
         submitButton.click(submitPicks);
@@ -240,7 +267,7 @@ chronicle.dungeoneering.draft = (function ($) {
         var cardData = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            local: cardList
+            local: cardList.allCards()
         });
         cardData.initialize();
 
@@ -254,9 +281,5 @@ chronicle.dungeoneering.draft = (function ($) {
             source: cardData.ttAdapter()
         }).bind('typeahead:select', cardSelected);
     };
-
-    $.getJSON('/data/cards.json', function (data) {
-        cardList = data;
-        init();
-    });
+    cardList = new chronicle.CardList(init);
 }(jQuery));
