@@ -1,13 +1,6 @@
 /*global jQuery, Bloodhound*/
 var chronicle = chronicle || {};
 chronicle.dungeoneering = chronicle.dungoneering || {};
-
-chronicle.Deck = function () {
-    "use strict";
-
-    var cards = [];
-};
-
 chronicle.dungeoneering.draft = (function ($) {
     'use strict';
 

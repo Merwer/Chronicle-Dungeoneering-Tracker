@@ -28,4 +28,6 @@ chronicle.CardList = function (callback) {
     jQuery.getJSON('/data/cards.json', function (data) {
         init(data);
     });
+
+    return this;
 };
