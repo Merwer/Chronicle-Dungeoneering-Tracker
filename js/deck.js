@@ -9,14 +9,10 @@ chronicle.Deck = function () {
     cards[chronicle.constants.cardType.COMBAT] = {};
     cards[chronicle.constants.cardType.SUPPORT] = {};
 
-    var alphabeticalSort = function (a, b) {
-        return a.card.name.localeCompare(b.card.name);
-    };
-
     var asArray = function (key) {
         return jQuery.map(cards[key], function (ele) {
             return ele;
-        }).sort(alphabeticalSort);
+        });
     };
 
     this.addCard = function (card) {
@@ -34,16 +30,16 @@ chronicle.Deck = function () {
         }
     };
 
-    this.allCards = function () {
-        return cards;
-    };
-
     this.fightCards = function () {
         return asArray(chronicle.constants.cardType.COMBAT);
     };
 
     this.supportCards = function () {
         return asArray(chronicle.constants.cardType.SUPPORT);
+    };
+
+    this.allCards = function () {
+        return jQuery.merge(this.fightCards(), this.supportCards());
     };
 
     return this;
