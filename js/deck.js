@@ -1,7 +1,7 @@
-/*global jQuery*/
-var chronicle = chronicle || {};
-chronicle.dungeoneering = chronicle.dungoneering || {};
-
+/*global jQuery,chronicle*/
+if (!chronicle || !chronicle.constants) {
+    throw new Error("Deck class cannot be used without first referencing chronicle-base.js");
+}
 chronicle.Deck = function () {
     "use strict";
 
