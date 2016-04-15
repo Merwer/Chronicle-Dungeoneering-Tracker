@@ -37,25 +37,50 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
+                    <span class="sr-only" data-i18n="aria.nav.toggle">Toggle Navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Dungeoneering Tracker</a>
+                <a class="navbar-brand" href="/" data-i18n="title">Dungeoneering Tracker</a>
             </div>
 
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="#"><i class="fa fa-heart"></i> My Dungeon Runs</a></li>
-                    <li><a href="#"><i class="fa fa-bar-chart"></i> My Stats</a></li>
-                    <li><a href="#"><i class="fa fa-globe"></i> Global Stats</a></li>>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-heart"></i>
+                            <span data-i18n="nav.myruns">My Dungeon Runs</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-bar-chart"></i>
+                            <span data-i18n="nav.mystats">My Stats</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <i class="fa fa-globe"></i>
+                            <span data-i18n="nav.globalstats">Global Stats</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <div id="navbar-right" class="navbar-right">
                     <ul class="nav navbar-nav">
-                        <li><a href="#"><i class="fa fa-question-circle"></i> What is this?</a></li>
-                        <li><a href="#"><i class="fa fa-gg-circle fa-rotate-90"></i> Support</a></li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-question-circle"></i>
+                                <span data-i18n="nav.aboutus">What is this?</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-gg-circle fa-rotate-90"></i>
+                                <span data-i18n="nav.support">Support</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -73,14 +98,14 @@
             <div class="col-md-7">
                 <div class="">
                     <div class="round-counter">
-                        <span>Round: </span>
+                        <span data-i18n="round-with-colon">Round: </span>
                         <span class="current">1</span> /
                         <span class="max">15</span>
                     </div>
                 </div>
                 <div class="card-choices">
                     <div class="user-input">
-                        <input class="typeahead" type="text" placeholder="Card Name">
+                        <input class="typeahead" type="text" placeholder="Card Name" data-i18n="[placeholder]card-name">
                         <button type="submit" class="btn btn-success" disabled>Submit</button>
                     </div>
                     <div class="row">
@@ -125,7 +150,7 @@
                 </div>
             </div>
             <div class="col-md-2">
-                <p data-i18n="total-rewards"></p>
+                <p data-i18n="total-rewards">Total Rewards</p>
                 <ol class="rewards">
                     <li class="icon weapon">0</li>
                     <li class="icon attack">0</li>
@@ -138,13 +163,13 @@
                 <div class="previous-selections">
                     <ol class="card-selections support-selections">
                         <div class="heading">
-                            <span class="name">Support</span>
+                            <span class="name" data-i18n="support">Support</span>
                             <span class="count">0</span>
                         </div>
                     </ol>
                     <ol class="card-selections fight-selections">
                         <div class="heading">
-                            <span class="name">Fight</span>
+                            <span class="name" data-i18n="fight">Fight</span>
                             <span class="count">0</span>
                         </div>
                     </ol>

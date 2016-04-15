@@ -1,3 +1,20 @@
 {
-    "total-rewards": "Total Rewards"
+    "title": "Dungeoneering Tracker",
+    "total-rewards": "Total Rewards",
+    "support": "Support",
+    "fight": "Fight",
+    "round-with-colon": "Round: ",
+    "card-name": "Card Name",
+    "nav": {
+        "myruns": "My Dungeon Runs",
+        "mystats": "My Stats",
+        "globalstats": "Global Stats",
+        "aboutus": "What is this?",
+        "support": "Support"
+    },
+    "aria": {
+        "nav": {
+            "toggle": "Toggle navigation"
+        }
+    }
 }

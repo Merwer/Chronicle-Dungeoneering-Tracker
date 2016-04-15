@@ -80,3 +80,7 @@
 .fight-selections li .value {
     background-color: red;
 }
+
+.card-score {
+    display: none;
+}
