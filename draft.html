@@ -125,6 +125,7 @@
                 </div>
             </div>
             <div class="col-md-2">
+                <p data-i18n="total-rewards"></p>
                 <ol class="rewards">
                     <li class="icon weapon">0</li>
                     <li class="icon attack">0</li>
@@ -164,6 +165,9 @@
 
     <script src="js/vendor/bootstrap.min.js"></script>
     <script src="js/vendor/typeahead.bundle.js"></script>
+    <script src="js/vendor/i18next.min.js"></script>
+    <script src="js/vendor/i18nextXHRBackend.min.js"></script>
+    <script src="js/vendor/jquery-i18next.min.js"></script>
 
     <script src="js/main.js"></script>
     <script src="js/chronicle-base.js"></script>
@@ -187,6 +191,23 @@
         }(window, document, 'script', 'ga'));
         ga('create', 'UA-XXXXX-X', 'auto');
         ga('send', 'pageview');
+    </script>
+
+    <script>
+        i18next.use(i18nextXHRBackend)
+            .init({
+                lng: 'en',
+                debug: true,
+                load: 'languageOnly',
+                backend: {
+                    loadPath: '/locales/{{lng}}.json'
+                }
+            }, function (err, t) {
+                'use strict';
+
+                jqueryI18next.init(i18next, jQuery);
+                jQuery('[data-i18n]').localize();
+            });
     </script>
 </body>
 
