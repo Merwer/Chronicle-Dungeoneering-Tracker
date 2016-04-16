@@ -15,66 +15,9 @@ chronicle.dungeoneering.draft = (function ($) {
     var cardList;
     var deck;
     var selectionSlots = $('.card-choices .card-choice');
-    var submitButton = $('.user-input button[type=submit]');
 
     var addToHtml = function (element, amount) {
         element.html(window.parseInt(element.html(), 10) + amount);
-    };
-
-    var saveCheck = function () {
-        var selectedCount = selectionSlots.filter('.selected').length;
-        var unfilledCount = selectionSlots.filter('.hidden').length;
-        if (selectedCount === 2 && unfilledCount === 0) {
-            submitButton.prop('disabled', false);
-            return true;
-        }
-        submitButton.prop('disabled', true);
-        return false;
-    };
-
-    var findNextEmptySlot = function () {
-        var unfilledSlots = selectionSlots.filter('.hidden');
-        return unfilledSlots.length === 0 ? null : $(unfilledSlots[0]);
-    };
-
-    var clearText = function () {
-        $('.typeahead').typeahead('val', '');
-    };
-
-    var cardSelected = function (ev, selectedCard) {
-        var img;
-        var nextSlot = findNextEmptySlot();
-        if (!nextSlot) {
-            return;
-        }
-
-        window.console.log('Selection: ', selectedCard);
-        img = $(nextSlot.children('img')[0]);
-        img.attr('src', selectedCard.image);
-        nextSlot.removeClass('hidden');
-        nextSlot.data('cardId', selectedCard.id);
-        clearText();
-        saveCheck();
-    };
-
-    var cardCloseClicked = function (evt) {
-        var choiceSlot = $(this).closest('.card-choice');
-        choiceSlot.addClass('hidden').removeClass('selected');
-        choiceSlot.data('cardId', null);
-        saveCheck();
-    };
-
-    var cardPicked = function () {
-        var choice = $(this).closest('.card-choice');
-        if (choice.hasClass('selected')) {
-            choice.removeClass('selected');
-        } else {
-            var selectedCount = selectionSlots.filter('.selected').length;
-            if (selectedCount < 2) {
-                choice.addClass('selected');
-            }
-        }
-        saveCheck();
     };
 
     var addReward = function (reward) {
@@ -165,6 +108,11 @@ chronicle.dungeoneering.draft = (function ($) {
         $('.fight-selections .heading .count').html(fightListSum);
     };
 
+    var refreshUI = function () {
+        refreshRewards();
+        refreshDeck();
+    };
+
     var clearChoices = function () {
         selectionSlots.addClass('hidden').removeClass('selected');
         selectionSlots.data('cardId', null);
@@ -174,13 +122,94 @@ chronicle.dungeoneering.draft = (function ($) {
         addToHtml($('.round-counter .current'), 1);
     };
 
-    var setRound = function (roundId) {
-        $('.round-counter .current').html(roundId);
+    var constructRound = function () {
+        var round = {
+            options: [],
+            picks: []
+        };
+        $.each(selectionSlots, function (index, element) {
+            var ele = $(element);
+            var cardId = ele.data('cardId');
+            round.options.push(cardId);
+            if (ele.hasClass('selected')) {
+                round.picks.push(cardId);
+            }
+        });
+        return round;
     };
 
-    var refreshUI = function () {
-        refreshRewards();
-        refreshDeck();
+    var performSave = function () {
+        var data = constructRound();
+        deck.addCard(cardList.getCard(data.picks[0]));
+        deck.addCard(cardList.getCard(data.picks[1]));
+        incrementRound();
+        clearChoices();
+        $.get('/', { //TODO: This should be a post
+            data: data
+        }).done(
+            refreshUI
+        ).fail(function () {
+            window.alert('Save failed');
+        });
+    };
+
+    var saveCheck = function () {
+        var selectedCount = selectionSlots.filter('.selected').length;
+        var unfilledCount = selectionSlots.filter('.hidden').length;
+        if (selectedCount === 2 && unfilledCount === 0) {
+            performSave();
+            return true;
+        }
+        return false;
+    };
+
+    var findNextEmptySlot = function () {
+        var unfilledSlots = selectionSlots.filter('.hidden');
+        return unfilledSlots.length === 0 ? null : $(unfilledSlots[0]);
+    };
+
+    var clearText = function () {
+        $('.typeahead').typeahead('val', '');
+    };
+
+    var cardSelected = function (ev, selectedCard) {
+        var img;
+        var nextSlot = findNextEmptySlot();
+        if (!nextSlot) {
+            return;
+        }
+
+        window.console.log('Selection: ', selectedCard);
+        img = $(nextSlot.children('img')[0]);
+        img.attr('src', selectedCard.image);
+        nextSlot.removeClass('hidden');
+        nextSlot.data('cardId', selectedCard.id);
+        clearText();
+        saveCheck();
+    };
+
+    var cardCloseClicked = function (evt) {
+        var choiceSlot = $(this).closest('.card-choice');
+        choiceSlot.addClass('hidden').removeClass('selected');
+        choiceSlot.data('cardId', null);
+        saveCheck();
+    };
+
+    var cardPicked = function () {
+        var choice = $(this).closest('.card-choice');
+        if (choice.hasClass('selected')) {
+            choice.removeClass('selected');
+        } else {
+            var selectedCount = selectionSlots.filter('.selected').length;
+            if (selectedCount < 2) {
+                choice.addClass('selected');
+            }
+        }
+        saveCheck();
+    };
+
+    var setRound = function (roundId) {
+        $('.round-counter .current').html(roundId);
     };
 
     var refreshWithState = function (state) {
@@ -202,22 +231,6 @@ chronicle.dungeoneering.draft = (function ($) {
         refreshUI();
     };
 
-    var constructRound = function () {
-        var round = {
-            options: [],
-            picks: []
-        };
-        $.each(selectionSlots, function (index, element) {
-            var ele = $(element);
-            var cardId = ele.data('cardId');
-            round.options.push(cardId);
-            if (ele.hasClass('selected')) {
-                round.picks.push(cardId);
-            }
-        });
-        return round;
-    };
-
     var requestDraftState = function () {
         $.getJSON('/data/state.json') //TODO: This should be a service
             .done(
@@ -227,31 +240,9 @@ chronicle.dungeoneering.draft = (function ($) {
             });
     };
 
-    var performSave = function () {
-        var data = constructRound();
-        deck.addCard(cardList.getCard(data.picks[0]));
-        deck.addCard(cardList.getCard(data.picks[1]));
-        incrementRound();
-        clearChoices();
-        $.get('/', { //TODO: This should be a post
-            data: data
-        }).done(
-            refreshUI
-        ).fail(function () {
-            window.alert('Save failed');
-        });
-    };
-
-    var submitPicks = function () {
-        if (saveCheck()) {
-            performSave();
-        }
-    };
-
     var init = function () {
         selectionSlots.find('.close').click(cardCloseClicked);
         selectionSlots.find('img').click(cardPicked);
-        submitButton.click(submitPicks);
 
         var cardData = new Bloodhound({
             datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),

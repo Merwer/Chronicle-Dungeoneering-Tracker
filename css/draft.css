@@ -41,6 +41,21 @@
     right: 0;
 }
 
+.rewards-container {
+    border: 3px solid black;
+    text-align: center;
+}
+
+.total-rewards {
+    background-color: darkkhaki;
+    padding-bottom: 5px;
+    margin-bottom: 0;
+}
+
+.rewards {
+    background-color: lightblue;
+}
+
 .rewards,
 .card-selections {
     list-style-type: none;
@@ -56,6 +71,22 @@
     display: inline-block;
 }
 
+.card-selections {
+    color: white;
+}
+
+.card-selections .count {
+    float: right;
+}
+
+.support-selections {
+    background-color: blue;
+}
+
+.fight-selections {
+    background-color: red;
+}
+
 .card-selections li {
     background-color: darkkhaki;
 }
@@ -65,7 +96,6 @@
 }
 
 .card-selections li .count {
-    float: right;
     background-color: darkkhaki;
 }
 
